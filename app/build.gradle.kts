@@ -36,6 +36,13 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+        kotlinOptions.jvmTarget = "1.8"
+    }
+
+    tasks.withType<JavaCompile> {
+        options.compilerArgs.addAll(listOf("-source", "1.8", "-target",  "1.8"))
+    }
     kotlinOptions {
         jvmTarget = "1.8"
     }
@@ -105,8 +112,9 @@ dependencies {
     implementation(Retrofit.gsonConverter)
     implementation(Gson.gson)
     //Room
-    implementation(Room.roomKtx)
-    implementation(Room.roomRuntime)
-    kapt(Room.roomCompiler)
+    implementation("androidx.room:room-runtime:2.6.1")
+    implementation("androidx.room:room-ktx:2.6.1")
+    kapt("androidx.room:room-compiler:2.6.1")
+    implementation("androidx.room:room-testing:2.6.1")
 
 }
