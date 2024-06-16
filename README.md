@@ -5,7 +5,7 @@ Proyecto
 
 <img src="https://github.com/crisanbe/ChallengeYape/blob/dev/app/src/main/res/drawable/gif.gif" alt=""/>
 
-![](https://github.com/crisanbe/ChallengeYape/blob/dev/app/src/main/res/drawable/dark.png)![](https://github.com/crisanbe/ChallengeYape/blob/dev/app/src/main/res/drawable/light.png)
+![](https://i.imgur.com/jEnP0jC.png)![](https://i.imgur.com/P4IuAbP.png)
 
 # Características principales
 1. Kotlin
