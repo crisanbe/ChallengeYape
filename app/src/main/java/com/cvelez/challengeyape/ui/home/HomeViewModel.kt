@@ -95,7 +95,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun filterRecipe(input: String) {
+    fun filterRecipe(input: String) {
         searchJob = viewModelScope.launch {
             try {
                 state = state.copy(isLoading = true)
@@ -151,7 +151,7 @@ class HomeViewModel @Inject constructor(
     }
 
 
-    private fun appendRecipes(newRecipes: List<Recipes>, oldRecipes: List<Recipes>) {
+    fun appendRecipes(newRecipes: List<Recipes>, oldRecipes: List<Recipes>) {
         val current = ArrayList(oldRecipes)
         current.addAll(newRecipes)
         state = state.copy(recipes = current, isLoading = false)

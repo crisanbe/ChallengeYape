@@ -26,7 +26,7 @@ class DetailViewModel @Inject constructor(
         getCharacter()
     }
 
-    private fun getCharacter() {
+    fun getCharacter() {
         savedStateHandle.get<Int>(ID_PARAMETER)?.let { characterId ->
             viewModelScope.launch {
                 getCharacterUseCase(characterId).also { result ->

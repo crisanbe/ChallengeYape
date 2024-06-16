@@ -95,6 +95,7 @@ dependencies {
     testImplementation(libs.mockito.kotlin)
     testImplementation("io.mockk:mockk:1.12.0")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
+    testImplementation("androidx.arch.core:core-testing:2.1.0")
 
     //map
     implementation(Google.playMervicesMaps)
