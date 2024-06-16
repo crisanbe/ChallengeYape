@@ -3,6 +3,10 @@
 Proyecto
 [https://github.com/crisanbe/RetoYape.git](https://github.com/crisanbe/ChallengeYape).
 
+<img src="https://github.com/crisanbe/ChallengeYape/blob/dev/app/src/main/res/drawable/gif.gif" alt=""/>
+
+![](https://github.com/crisanbe/ChallengeYape/blob/dev/app/src/main/res/drawable/dark.png)![](https://github.com/crisanbe/ChallengeYape/blob/dev/app/src/main/res/drawable/light.png)
+
 # Características principales
 1. Kotlin
 1. MVVM
