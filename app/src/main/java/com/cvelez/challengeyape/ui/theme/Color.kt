@@ -11,7 +11,7 @@ val Teal200 = Color(0xFF03DAC5)
 /*
     BLUE LIGHT PALETTE
  */
-val YELLOW_ORANGE500 = Color(0xFF8bc34b)  // Primary
+val GREEN_500 = Color(0xFF8bc34b)  // Primary
 val CORVETTE800 = Color(0xFF8bc34b)  // PrimaryVariant
 val SUSHI500 = Color(0xFF8bc34b)  // Secondary
 val TEAL700 = Color(0xff008ba3)  // SecondaryVariant

@@ -1,7 +1,6 @@
 @file:OptIn(ExperimentalComposeUiApi::class)
 
 package com.cvelez.challengeyape.ui.home
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,6 +17,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -108,16 +109,16 @@ fun HomeScreen(
                 .padding(horizontal = 20.dp)
                 .background(Color.Transparent),
         ) {
-        HomeContent(
-            modifier = Modifier.padding(),
-            input = state.input,
-            onItemClicked = { onItemClicked(it) },
-            isLoading = state.isLoading,
-            characters = state.recipes,
-            page = state.page,
-            getCharacters = { input, press -> viewModel.searchRecipes(input,press) },
-            onEvent = { viewModel.onEvent(it) }
-        )
+            HomeContent(
+                modifier = Modifier.padding(),
+                input = state.input,
+                onItemClicked = { onItemClicked(it) },
+                isLoading = state.isLoading,
+                characters = state.recipes,
+                page = state.page,
+                getCharacters = { input, press -> viewModel.searchRecipes(input,press) },
+                onEvent = { viewModel.onEvent(it) }
+            )
         }
     }
 }
@@ -138,10 +139,14 @@ private fun HomeTopBar(
         },
         title = {
             Text(
-                text = "${stringResource(id = R.string.home_title)} 🥗",
+                text = "Tu receta favorita🥗!",
+                fontSize = 35.sp,
+                fontWeight = FontWeight.Bold,
+                fontFamily = FontFamily.Cursive,
                 textAlign = TextAlign.Center,
-                modifier = modifier
-                    .fillMaxSize()
+                modifier = Modifier
+                    .padding(8.dp)
+                    .fillMaxWidth()
                     .wrapContentSize(Alignment.Center)
             )
         }
@@ -153,7 +158,7 @@ private fun HomeContent(
     modifier: Modifier = Modifier,
     onItemClicked: (Int) -> Unit,
     isLoading: Boolean = false,
-    input: String = remember { mutableStateOf("").toString()},
+    input: String = "",
     characters: List<Recipes> = emptyList(),
     getCharacters: (String, Boolean) -> Unit,
     hint: String = "",
@@ -162,61 +167,48 @@ private fun HomeContent(
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     var isHintDisplayed by remember { mutableStateOf(hint != "") }
+
     Surface(color = MaterialTheme.colors.background) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Spacer(modifier = Modifier.size(2.dp))
-            Text(
-                text = "Encuentra tu receta favorita!",
-                fontFamily = FontFamily.Serif,
-                textAlign = TextAlign.Center,
-                style = TextStyle(
-                    color = colorResource(id = R.color.purple_200)
-                ),
-                fontSize = 20.sp,
-                fontWeight = FontWeight.ExtraBold,
-            )
-            Spacer(modifier = Modifier.size(10.dp))
+            Spacer(modifier = Modifier.size(20.dp))
             Box(modifier = modifier) {
-                IconButton(onClick = {}) {
-                    OutlinedTextField(
-                        value = input,
-                        onValueChange = { onEvent(HomeEvent.EnteredRecipe(it)) },
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Text,
-                            imeAction = ImeAction.Search
-                        ),
-                        keyboardActions = KeyboardActions(
-                            onSearch = {
-                                getCharacters(input, true)
-                                keyboardController?.hide()
-                            },
-                        ),
-                        singleLine = true,
-                        label = { Text("Receta") },
-                        placeholder = { Text("Buscar..") },
-                        maxLines = 1,
-                        shape = RoundedCornerShape(30.dp),
-                        trailingIcon = {
-                            if (input.isNotBlank()) {
-                                IconButton(onClick = {
-                                    input.removePrefix("")
-                                }
-                                ) {
-                                    Icon(
-                                        imageVector = Icons.Outlined.Delete,
-                                        contentDescription = "Limpiar campo"
-                                    )
-                                }
-                            }
+                OutlinedTextField(
+                    value = input,
+                    onValueChange = { onEvent(HomeEvent.EnteredRecipe(it)) },
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Search
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onSearch = {
+                            getCharacters(input, true) // Realizar nueva búsqueda
+                            keyboardController?.hide()
                         },
-                        modifier = Modifier
-                            .width(400.dp)
-                            .offset(y = (-13).dp)
-                            .onFocusChanged {
-                                isHintDisplayed = (!it.isFocused) && input.isNotEmpty()
+                    ),
+                    singleLine = true,
+                    label = { Text("Receta") },
+                    placeholder = { Text("Buscar..") },
+                    maxLines = 1,
+                    shape = RoundedCornerShape(30.dp),
+                    trailingIcon = {
+                        if (input.isNotBlank()) {
+                            IconButton(onClick = {
+                                onEvent(HomeEvent.EnteredRecipe(""))
+                            }) {
+                                Icon(
+                                    imageVector = Icons.Outlined.Delete,
+                                    contentDescription = "Limpiar campo"
+                                )
                             }
-                    )
-                }
+                        }
+                    },
+                    modifier = Modifier
+                        .width(400.dp)
+                        .offset(y = (-13).dp)
+                        .onFocusChanged {
+                            isHintDisplayed = (!it.isFocused) && input.isNotEmpty()
+                        }
+                )
                 if (isHintDisplayed) {
                     Text(
                         text = hint,
@@ -227,29 +219,39 @@ private fun HomeContent(
             }
         }
     }
+
+    // Utilizamos un efecto lanzado para asegurar que se recargue la lista cuando cambie el input
+    LaunchedEffect(input) {
+        // Si input cambia a vacío, volvemos a obtener las recetas
+        if (input.isEmpty()) {
+            getCharacters("", true) // Realizar nueva búsqueda
+        }
+    }
+
     Surface(
         modifier = modifier.fillMaxSize(),
         color = MaterialTheme.colors.surface
     ) {
-        LazyColumn(
-            contentPadding = PaddingValues(vertical = 6.dp),
-            modifier = Modifier.fillMaxWidth(),
-            content = {
-                items(characters.size) { index ->
-                    if (!isLoading && ((index + 1) >= (page * 20))) {
-                        getCharacters(input, false)
-                    }
-                    RecipeItem(
-                        modifier = Modifier.fillMaxWidth(),
-                        item = characters[index],
-                        onItemClicked = { onItemClicked(it) }
-                    )
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            contentPadding = PaddingValues(horizontal = 10.dp, vertical = 8.dp)
+        ) {
+            items(characters.size) { index ->
+                RecipeItem(
+                    modifier = Modifier.padding(4.dp),
+                    item = characters[index],
+                    onItemClicked = onItemClicked
+                )
+                // Verificar si estamos cerca del final de la lista para cargar más
+                if (index == characters.size - 1 && !isLoading) {
+                    getCharacters(input, false) // Cargar más resultados
                 }
             }
-        )
+        }
         if (isLoading) FullScreenLoading()
     }
 }
+
 
 @Composable
 private fun HomeBottomBar(
