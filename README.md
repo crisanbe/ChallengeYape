@@ -41,7 +41,8 @@ Proyecto
    Puedes configurar tu proyecto para que las pruebas generen informes de cobertura de código y luego ver los resultados en Android Studio.
 	1. Comando ./gradlew koverMergedReport  
 
-![]()
+![](https://github.com/crisanbe/ChallengeYape/blob/dev/app/src/main/res/drawable/homeviewmodel.png)
+![](https://github.com/crisanbe/ChallengeYape/blob/dev/app/src/main/res/drawable/detailviemodel.png)
 
 #  Flow?
 1. Flow
